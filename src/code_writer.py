@@ -30,7 +30,58 @@ D=M
 A=A-1
 M=M+D
 """
-            )
+        )
+
+        elif command == "sub":
+
+            self.file.write(
+"""@SP
+AM=M-1
+D=M
+A=A-1
+M=M-D
+"""
+        )
+
+        elif command == "neg":
+
+            self.file.write(
+"""@SP
+A=M-1
+M=-M
+"""
+        )
+
+        elif command == "and":
+
+            self.file.write(
+"""@SP
+AM=M-1
+D=M
+A=A-1
+M=M&D
+"""
+        )
+
+        elif command == "or":
+
+            self.file.write(
+"""@SP
+AM=M-1
+D=M
+A=A-1
+M=M|D
+"""
+        )
+
+        elif command == "not":
+
+            self.file.write(
+"""@SP
+A=M-1
+M=!M
+"""
+        )
 
     def close(self):
 
