@@ -1,25 +1,33 @@
 from parser import Parser
+from code_writer import CodeWriter
 
 
 def main():
 
     parser = Parser("tests/Simple.vm")
 
+    writer = CodeWriter("tests/Simple.asm")
+
     while parser.has_more_commands():
 
         parser.advance()
 
-        print(
-            parser.command_type(),
-            parser.arg1(),
-            end=""
-        )
+        command_type = parser.command_type()
 
-        if parser.command_type() != "C_ARITHMETIC":
-            print(f" {parser.arg2()}")
+        if command_type == "C_PUSH":
 
-        else:
-            print()
+            writer.write_push(
+                parser.arg1(),
+                parser.arg2()
+            )
+
+        elif command_type == "C_ARITHMETIC":
+
+            writer.write_arithmetic(
+                parser.arg1()
+            )
+
+    writer.close()
 
 
 if __name__ == "__main__":

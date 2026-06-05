@@ -1,6 +1,3 @@
 push constant 7
 push constant 8
 add
-
-push local 0
-pop argument 2
