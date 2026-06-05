@@ -9,6 +9,7 @@ class CodeWriter:
     def __init__(self, output_file):
 
         self.file = open(output_file, "w", encoding="utf-8")
+        self.label_count = 0
 
     def write_push(self, segment, index):
 
@@ -218,6 +219,45 @@ A=M-1
 M=!M
 """
         )
+        
+        elif command == "eq":
+
+            self.write_comparison("JEQ")
+
+        elif command == "gt":
+
+            self.write_comparison("JGT")
+
+        elif command == "lt":
+
+            self.write_comparison("JLT")
+            
+    def write_comparison(self, jump_command):
+
+        true_label = f"BOOL_TRUE_{self.label_count}"
+        end_label = f"BOOL_END_{self.label_count}"
+        self.label_count += 1
+
+        self.file.write(
+f"""@SP
+AM=M-1
+D=M
+A=A-1
+D=M-D
+@{true_label}
+D;{jump_command}
+@SP
+A=M-1
+M=0
+@{end_label}
+0;JMP
+({true_label})
+@SP
+A=M-1
+M=-1
+({end_label})
+"""
+    )
 
     def close(self):
 
