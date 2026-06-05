@@ -21,6 +21,13 @@ def main():
                 parser.arg2()
             )
 
+        elif command_type == "C_POP":
+
+            writer.write_pop(
+                parser.arg1(),
+                parser.arg2()
+            )
+
         elif command_type == "C_ARITHMETIC":
 
             writer.write_arithmetic(

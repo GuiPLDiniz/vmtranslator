@@ -1,14 +1,7 @@
 push constant 10
+pop local 0
+push local 0
 push constant 3
-sub
-
-neg
-
-push constant 6
-push constant 2
-and
-
-push constant 4
-or
-
-not
+add
+pop argument 2
+push argument 2
