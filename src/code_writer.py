@@ -42,6 +42,54 @@ M=D
 M=M+1
 """
         )
+        
+        elif segment == "temp":
+
+            address = 5 + index
+
+            self.file.write(
+f"""@R{address}
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+"""
+        )
+
+        elif segment == "pointer":
+
+            if index == 0:
+                pointer = "THIS"
+            elif index == 1:
+                pointer = "THAT"
+            else:
+                raise ValueError("Segmento pointer aceita apenas índice 0 ou 1")
+
+            self.file.write(
+f"""@{pointer}
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+"""
+        )
+
+        elif segment == "static":
+
+            self.file.write(
+f"""@Static.{index}
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+"""
+        )
     
     def write_pop(self, segment, index):
 
@@ -61,6 +109,48 @@ AM=M-1
 D=M
 @R13
 A=M
+M=D
+"""
+        )
+        
+        elif segment == "temp":
+
+            address = 5 + index
+
+            self.file.write(
+f"""@SP
+AM=M-1
+D=M
+@R{address}
+M=D
+"""
+        )
+
+        elif segment == "pointer":
+
+            if index == 0:
+                pointer = "THIS"
+            elif index == 1:
+                pointer = "THAT"
+            else:
+                raise ValueError("Segmento pointer aceita apenas índice 0 ou 1")
+
+            self.file.write(
+f"""@SP
+AM=M-1
+D=M
+@{pointer}
+M=D
+"""
+        )
+
+        elif segment == "static":
+
+            self.file.write(
+f"""@SP
+AM=M-1
+D=M
+@Static.{index}
 M=D
 """
         )
