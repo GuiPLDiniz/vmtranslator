@@ -1,2 +1,4 @@
+__pycache__/
 # arquivos gerados pelo CPU Emulator
 *.out
+*.pyc
