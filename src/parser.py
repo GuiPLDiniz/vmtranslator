@@ -40,25 +40,54 @@ class Parser:
     def command_type(self):
 
         parts = self.current_command.split()
+        command = parts[0]
 
-        if parts[0] == "push":
+        if command == "push":
             return "C_PUSH"
 
-        if parts[0] == "pop":
+        if command == "pop":
             return "C_POP"
 
-        if parts[0] in self.ARITHMETIC_COMMANDS:
+        if command == "label":
+            return "C_LABEL"
+
+        if command == "goto":
+            return "C_GOTO"
+
+        if command == "if-goto":
+            return "C_IF"
+
+        if command == "function":
+            return "C_FUNCTION"
+
+        if command == "call":
+            return "C_CALL"
+
+        if command == "return":
+            return "C_RETURN"
+
+        if command in self.ARITHMETIC_COMMANDS:
             return "C_ARITHMETIC"
 
         raise ValueError(f"Comando desconhecido: {self.current_command}")
 
     def arg1(self):
 
-        if self.command_type() == "C_ARITHMETIC":
+        command_type = self.command_type()
+
+        if command_type == "C_RETURN":
+            raise ValueError("Comando return não possui arg1")
+
+        if command_type == "C_ARITHMETIC":
             return self.current_command.split()[0]
 
         return self.current_command.split()[1]
 
     def arg2(self):
+
+        command_type = self.command_type()
+
+        if command_type not in ["C_PUSH", "C_POP", "C_FUNCTION", "C_CALL"]:
+            raise ValueError(f"Comando {command_type} não possui arg2")
 
         return int(self.current_command.split()[2])
