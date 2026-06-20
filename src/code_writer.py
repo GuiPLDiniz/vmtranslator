@@ -258,6 +258,32 @@ M=-1
 ({end_label})
 """
     )
+    
+    def write_label(self, label):
+
+            self.file.write(
+            f"""({label})
+            """
+                    )
+
+    def write_goto(self, label):
+
+            self.file.write(
+            f"""@{label}
+            0;JMP
+            """
+                    )
+
+    def write_if(self, label):
+
+            self.file.write(
+f"""@SP
+AM=M-1
+D=M
+@{label}
+D;JNE
+"""
+        )
 
     def close(self):
 

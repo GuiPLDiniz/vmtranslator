@@ -35,6 +35,15 @@ def translate(input_file):
         elif command_type == "C_ARITHMETIC":
             writer.write_arithmetic(parser.arg1())
 
+        elif command_type == "C_LABEL":
+            writer.write_label(parser.arg1())
+
+        elif command_type == "C_GOTO":
+            writer.write_goto(parser.arg1())
+
+        elif command_type == "C_IF":
+            writer.write_if(parser.arg1())
+
     writer.close()
 
     print(f"[OK] Arquivo gerado: {output_path}")
