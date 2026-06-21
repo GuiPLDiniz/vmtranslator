@@ -43,6 +43,12 @@ def translate(input_file):
 
         elif command_type == "C_IF":
             writer.write_if(parser.arg1())
+        
+        elif command_type == "C_FUNCTION":
+            writer.write_function(
+                parser.arg1(),
+                parser.arg2()
+            )
 
     writer.close()
 

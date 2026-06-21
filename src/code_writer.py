@@ -284,6 +284,26 @@ D=M
 D;JNE
 """
         )
+            
+    def write_function(self, function_name, n_vars):
+
+        self.file.write(
+f"""({function_name})
+"""
+        )
+
+        for _ in range(n_vars):
+
+            self.file.write(
+"""@0
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+"""
+            )
 
     def close(self):
 
