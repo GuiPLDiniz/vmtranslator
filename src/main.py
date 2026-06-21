@@ -49,6 +49,9 @@ def translate(input_file):
                 parser.arg1(),
                 parser.arg2()
             )
+        
+        elif command_type == "C_RETURN":
+            writer.write_return()
 
     writer.close()
 
