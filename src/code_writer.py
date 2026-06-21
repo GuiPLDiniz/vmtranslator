@@ -10,6 +10,7 @@ class CodeWriter:
 
         self.file = open(output_file, "w", encoding="utf-8")
         self.label_count = 0
+        self.call_count = 0
 
     def write_push(self, segment, index):
 
@@ -360,6 +361,71 @@ A=M
 0;JMP
 """
         )
+
+    def write_call(self, function_name, n_args):
+
+        return_label = f"RETURN_{self.call_count}"
+        self.call_count += 1
+
+        self.file.write(
+f"""@{return_label}
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@SP
+D=M
+@{n_args + 5}
+D=D-A
+@ARG
+M=D
+
+@SP
+D=M
+@LCL
+M=D
+
+@{function_name}
+0;JMP
+
+({return_label})
+"""
+    )
 
     def close(self):
 

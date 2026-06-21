@@ -52,6 +52,12 @@ def translate(input_file):
         
         elif command_type == "C_RETURN":
             writer.write_return()
+        
+        elif command_type == "C_CALL":
+            writer.write_call(
+                parser.arg1(),
+                parser.arg2()
+            )
 
     writer.close()
 
