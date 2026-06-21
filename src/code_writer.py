@@ -426,6 +426,18 @@ M=D
 ({return_label})
 """
     )
+        
+    def write_init(self):
+
+            self.file.write(
+"""@256
+D=A
+@SP
+M=D
+"""
+        )
+
+            self.write_call("Sys.init", 0)
 
     def close(self):
 

@@ -5,21 +5,9 @@ from parser import Parser
 from code_writer import CodeWriter
 
 
-def translate(input_file):
-    input_path = Path(input_file)
-
-    if not input_path.exists():
-        print(f"Erro: arquivo não encontrado: {input_path}")
-        sys.exit(1)
-
-    if input_path.suffix.lower() != ".vm":
-        print("Erro: o arquivo de entrada deve ter extensão .vm")
-        sys.exit(1)
-
-    output_path = input_path.with_suffix(".asm")
+def translate_file(input_path, writer):
 
     parser = Parser(input_path)
-    writer = CodeWriter(output_path)
 
     while parser.has_more_commands():
         parser.advance()
@@ -43,30 +31,72 @@ def translate(input_file):
 
         elif command_type == "C_IF":
             writer.write_if(parser.arg1())
-        
+
         elif command_type == "C_FUNCTION":
             writer.write_function(
                 parser.arg1(),
                 parser.arg2()
             )
-        
-        elif command_type == "C_RETURN":
-            writer.write_return()
-        
+
         elif command_type == "C_CALL":
             writer.write_call(
                 parser.arg1(),
                 parser.arg2()
             )
 
-    writer.close()
+        elif command_type == "C_RETURN":
+            writer.write_return()
 
-    print(f"[OK] Arquivo gerado: {output_path}")
+
+def translate(input_path_str):
+
+    input_path = Path(input_path_str)
+
+    if not input_path.exists():
+        print(f"Erro: caminho não encontrado: {input_path}")
+        sys.exit(1)
+
+    if input_path.is_file():
+
+        if input_path.suffix.lower() != ".vm":
+            print("Erro: o arquivo de entrada deve ter extensão .vm")
+            sys.exit(1)
+
+        output_path = input_path.with_suffix(".asm")
+        writer = CodeWriter(output_path)
+
+        translate_file(input_path, writer)
+
+        writer.close()
+
+        print(f"[OK] Arquivo gerado: {output_path}")
+
+    elif input_path.is_dir():
+
+        vm_files = list(input_path.glob("*.vm"))
+
+        if not vm_files:
+            print("Erro: nenhum arquivo .vm encontrado no diretório")
+            sys.exit(1)
+
+        output_path = input_path / f"{input_path.name}.asm"
+
+        writer = CodeWriter(output_path)
+
+        writer.write_init()
+
+        for vm_file in vm_files:
+            translate_file(vm_file, writer)
+
+        writer.close()
+
+        print(f"[OK] Arquivo gerado: {output_path}")
 
 
 def main():
+
     if len(sys.argv) != 2:
-        print("Uso: python src/main.py <arquivo.vm>")
+        print("Uso: python src/main.py <arquivo.vm | diretorio>")
         sys.exit(1)
 
     translate(sys.argv[1])
