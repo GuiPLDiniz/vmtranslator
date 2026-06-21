@@ -7,6 +7,8 @@ from code_writer import CodeWriter
 
 def translate_file(input_path, writer):
 
+    writer.set_file_name(input_path)
+
     parser = Parser(input_path)
 
     while parser.has_more_commands():

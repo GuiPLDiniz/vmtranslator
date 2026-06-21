@@ -11,6 +11,7 @@ class CodeWriter:
         self.file = open(output_file, "w", encoding="utf-8")
         self.label_count = 0
         self.call_count = 0
+        self.current_file = ""
 
     def write_push(self, segment, index):
 
@@ -83,7 +84,7 @@ M=M+1
         elif segment == "static":
 
             self.file.write(
-f"""@Static.{index}
+f"""@{self.current_file}.{index}
 D=M
 @SP
 A=M
@@ -152,7 +153,7 @@ M=D
 f"""@SP
 AM=M-1
 D=M
-@Static.{index}
+@{self.current_file}.{index}
 M=D
 """
         )
@@ -438,6 +439,12 @@ M=D
         )
 
             self.write_call("Sys.init", 0)
+
+    def set_file_name(self, file_path):
+
+        from pathlib import Path
+
+        self.current_file = Path(file_path).stem
 
     def close(self):
 
